@@ -27,5 +27,14 @@ class StringDecompressorTest {
 	final void testDecompress3() {
 		assertEquals("aaabaaab" , StringDecompressor.decompress("2[3[a]b]"));
 	}
-
+	
+	@Test
+	final void testDecompress4() {
+		assertEquals("ab" , StringDecompressor.decompress("a[]b"));
+	}
+	
+	@Test
+	final void testDecompress5() {
+		assertEquals("", StringDecompressor.decompress("0[abc]"));
+	}
 }

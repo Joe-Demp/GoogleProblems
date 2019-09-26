@@ -71,6 +71,8 @@ public class StringDecompressor {
 		System.out.println(StringDecompressor.decompress("10[a]"));
 		
 		System.out.println(StringDecompressor.decompress("2[3[a]b]"));
+		
+		System.out.println(StringDecompressor.decompress("a[]b"));
 	}
 
 }
