@@ -37,4 +37,9 @@ class StringDecompressorTest {
 	final void testDecompress5() {
 		assertEquals("", StringDecompressor.decompress("0[abc]"));
 	}
+	
+	@Test
+	final void testDecompress6() {
+		assertEquals("abc", StringDecompressor.decompress("[abc]"));
+	}
 }

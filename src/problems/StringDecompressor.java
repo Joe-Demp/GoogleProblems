@@ -43,7 +43,8 @@ public class StringDecompressor {
 				}
 				
 				// Get the decompressed string and the multiplier
-				int multiplier = Integer.parseInt(number.toString());
+				//	multiplier length = 0 if no digit before [ assume 1
+				int multiplier = (number.length() == 0) ? 1 : Integer.parseInt(number.toString());
 				String subResult = decompress(arg.substring(openingIndex + 1, lastClosingIndex));
 				
 				for (int m = 0; m < multiplier; ++m)
