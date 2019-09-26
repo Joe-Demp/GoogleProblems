@@ -1,26 +1,29 @@
 /*
- * Working solution for the String decompression problem from here:
+ * Working solution for the String decompression problem from:
  * https://techdevguide.withgoogle.com/paths/advanced/compress-decompression#!
  */
 package problems;
-import java.util.Scanner;
 import java.util.Stack;
 
 public class StringDecompressor {
 
 	public static String decompress(String arg) {
 		String result = "";
-		Scanner scan = new Scanner(arg);
-		scan.useDelimiter("\\W");
+		StringBuilder number = new StringBuilder();
 		int i = 0;
 		
 		while (i < arg.length()) {
-			char c = arg.charAt(i);
+			Character c = arg.charAt(i);
+			
 			if (Character.isDigit(c)) {
-				//	take in the whole number
-				//TODO fix this line, scanner can't pick out integer
-				int k = scan.nextInt(1);
-				int openingIndex = arg.indexOf("[");
+				number.append(c);
+				++i;
+			} 
+			else if (c.compareTo('[') == 0) {
+				// openingIndex points to the '[' itself
+				//	Must pass openingIndex + 1 to substring to cut it out of the next decompression
+				//	and prevent infinite recursion
+				int openingIndex = i;
 				int lastClosingIndex = -1;
 				
 				// run through String from opening index to the position of the last ]
@@ -38,30 +41,36 @@ public class StringDecompressor {
 					
 					j++;
 				}
-				String subResult = decompress(arg.substring(openingIndex, lastClosingIndex));
-				for (int m = 0; m < k; ++m)
+				
+				// Get the decompressed string and the multiplier
+				int multiplier = Integer.parseInt(number.toString());
+				String subResult = decompress(arg.substring(openingIndex + 1, lastClosingIndex));
+				
+				for (int m = 0; m < multiplier; ++m)
 					result += subResult;
 				
-				i = lastClosingIndex + 1;
-			} 
-			else if (Character.isLetter(c)) 
-				result += arg.charAt(i++);
-
-			else return result;
+				// reset the key components
+				i = lastClosingIndex + 1;		// i skips the [..] section
+				number = new StringBuilder();	// create a new empty StringBuilder
+			}
+			else if (Character.isLetter(c)) { 
+				result += c;
+				++i;
+			}
+			else throw new IllegalArgumentException("String arg in incorrect format");
 		}
-		//TODO ensure every case has a return value
-		return "";
+		
+		return result;
 	}
 	
 	
 	
 	public static void main(String[] args) {
-		String m = "My [Little] Pony";
-		Scanner scan = new Scanner(m);
+		System.out.println(StringDecompressor.decompress("3[abc]4[ab]c"));
 		
-		scan.useDelimiter("\\W");
-		while (scan.hasNext())
-			System.out.print(scan.next());
+		System.out.println(StringDecompressor.decompress("10[a]"));
+		
+		System.out.println(StringDecompressor.decompress("2[3[a]b]"));
 	}
 
 }
